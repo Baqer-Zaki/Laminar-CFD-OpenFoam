@@ -1,0 +1,100 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2206                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+scale   0.1;
+
+vertices
+(
+    (0 0 0)  // point 0
+    (1 0 0)  // point 1
+    (1 1 0)  //point 2
+    (0 1 0)  // point 3
+    (0 0 0.1)  //point 4
+    (1 0 0.1)  //point 5
+    (1 1 0.1)  // point 6
+    (0 1 0.1)  // poiny 7 
+/// new points 
+    (2 0 0) // point 8
+    (2 1 0) //point 9
+    (2 0 0.1) //point 10 
+    (2 1 0.1) // point 11 
+
+);
+
+blocks
+(
+    hex (0 1 2 3 4 5 6 7) (20 20 1) simpleGrading (1 1 1)
+    hex (1 8 9 2 5 10 11 6) (20 20 1) simpleGrading (1 1 1)
+);
+
+edges
+(
+);
+
+boundary
+(
+    bottomWall
+    {
+        type wall;
+        faces
+        (
+            (1 8 10 5)  //// this is wall for the bottom  
+        );
+    }
+  ////////////////////////////////////  
+   zeroGradientPlanes
+    {
+        type wall;
+        faces
+        (
+            (1 5 4 0)  // the the first bottom side, interance 
+	    (8 9 11 10) //THIS one is the outlet 
+            (3 7 6 2)  // this one is the top 1
+	    (2 6 11 9) //the top plate block 2
+
+        );
+	}
+
+////////////////////    
+leftWall
+    {
+      type patch;
+       faces
+      (
+	  (0 4 7 3)  // this is the left side, inlet  			   
+         
+        );
+     } 
+
+////////////////////////////////////
+
+
+///////////////////////////////////////	      
+    frontAndBack
+    {
+        type empty;
+        faces
+        (
+            (0 3 2 1)  // z=zero 
+            (4 5 6 7)  // z = 0.1m
+	    (1 2 9 8) // second block z =0
+	    (5 6 11 10) // second block z=0.1  
+        );
+    }
+);
+
+
+// ************************************************************************* //
